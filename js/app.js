@@ -35,34 +35,34 @@ new Items('water-can');
 new Items('wine-glass');
 
 function itemRandom(){
-  var random = Math.floor(Math.random()*allItems.length);
-  firstPic.src = allItems[random].filepath;
-  firstPic.alt = allItems[random].name;
-  firstPic.title = allItems[random].name;
-  allItems[random].views++;
-  console.log('current', allItems[random]);
-}
-itemRandom();
+  var random1 = Math.floor(Math.random()*allItems.length);
+  firstPic.src = allItems[random1].filepath;
+  firstPic.alt = allItems[random1].name;
+  firstPic.title = allItems[random1].name;
+  allItems[random1].views++;
 
-function itemRandom2(){ 
   var random2 = Math.floor(Math.random()*allItems.length);
+  while (random2 === random1) {
+    random2 = Math.floor(Math.random()*allItems.length);
+  }
   secondPic.src = allItems[random2].filepath;
   secondPic.alt = allItems[random2].name;
   secondPic.title = allItems[random2].name;
-  allItems[random2].views++;
-  console.log('current', allItems[random2]);
-}
-itemRandom2();
+  allItems[random2].views++; 
 
-function itemRandom3(){ 
   var random3 = Math.floor(Math.random()*allItems.length);
+  while (random3 === random1 || random3 === random2){
+    random3 = Math.floor(Math.random()* allItems.length);
+  }
   thirdPic.src = allItems[random3].filepath;
   thirdPic.alt = allItems[random3].name;
   thirdPic.title = allItems[random3].name;
   allItems[random3].views++;
-  console.log('current', allItems[random3]);
+
 }
-itemRandom3();
+itemRandom();
+
+
 
 secondPic.addEventListener('click', handleClick);
 firstPic.addEventListener('click', handleClick);
@@ -70,7 +70,6 @@ thirdPic.addEventListener('click', handleClick);
 function handleClick(event) {
   console.log('target, ', event.target);
   itemRandom();
-  itemRandom2();
-  itemRandom3();
+
 }
 

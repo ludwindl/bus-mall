@@ -2,18 +2,22 @@
 <html>
 <head>
     <title>Bus Mall</title>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.min.js"></script>
 </head>
 <body>
     <h1>Select one of the three images below.</h1>
 
-    <section>
+    <section id = "pics">
         <img id = "firstpic" src="" alt="" title="">
         <img id = "secondpic" src = "" alt = "" title = "">
         <img id = "thirdpic" src = "" alt = "" title="">
 
     </section>
-
+   <h1>Times that items were viewed</h1>
+    <ul id = "list"></ul>
+    <ul id = "list1"></ul>
     <script src = "js/app.js"></script>
+    <canvas id="chart" width="400" height="400"></canvas>
 
     
 </body>

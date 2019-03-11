@@ -1,0 +1,19 @@
+h1 {
+    text-align: center;
+}
+h2 {
+    text-align: center;
+}
+main #outsidepic {
+    text-align: center;
+}
+main #chartstyle {
+    position: absolute;
+    margin: auto;
+    height: 80vh;
+    width: 80vw;
+}
+
+ canvas {
+    border: 1px dotted red;
+ }

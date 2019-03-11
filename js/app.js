@@ -1,20 +1,26 @@
 'use strict';
-//var clicksOnImage = document.getElementById('list');
-var firstPic = document.getElementById('firstpic');
-var secondPic = document.getElementById('secondpic');
-var thirdPic = document.getElementById('thirdpic');
+
 var allItems = [];
-var numTotalClicks = 0;
-var labels = [];
+
+var clicksOnImage = document.getElementById('outsidepic');
+
+var results = document.getElementById('resultsbutton');
+
+var numberOfClicks = [];
+
+var itemLabels = [];
+
 var voteLabels = [];
 
-function Items(name,filepath) {
-  this.filepath = filepath;/*`img/${name}.jpg`;*/
+
+
+var Items = function(name, filepath) {
   this.name = name;
-  this.views = 0;
-  this.clicks = 0;
-  allItems.push(this); 
-}
+  this.filepath = filepath;
+  this.votes = 0;
+  this.displayed = 0;
+  allItems.push(this);
+};
 
 new Items('bag','img/bag.jpg');
 new Items('banana','img/banana.jpg');
@@ -38,80 +44,83 @@ new Items('water-can','img/water-can.jpg');
 new Items('wine-glass','img/wine-glass.jpg');
 
 
-
-//function to show the three pictures.
-
-function itemRandom(){
-  var random1 = Math.floor(Math.random()*allItems.length);
-  firstPic.src = allItems[random1].filepath;
-  firstPic.alt = allItems[random1].name;
-  firstPic.title = allItems[random1].name;
-  allItems[random1].views++;
-  allItems[random1].clicks++;
-  
-  //picture 2 has to be different than picture 1.
-  var random2 = Math.floor(Math.random()*allItems.length);
-  while (random2 === random1) {
-    random2 = Math.floor(Math.random()*allItems.length);
-  }
-  secondPic.src = allItems[random2].filepath;
-  secondPic.alt = allItems[random2].name;
-  secondPic.title = allItems[random2].name;
-  allItems[random2].views+=1;
-  allItems[random2].clicks++;
-  
-  //picture 3 has to be different than picture 1 and 2.
-  var random3 = Math.floor(Math.random()*allItems.length);
-  while (random3 === random1 || random3 === random2){
-    random3 = Math.floor(Math.random()* allItems.length);
-  }
-  thirdPic.src = allItems[random3].filepath;
-  thirdPic.alt = allItems[random3].name;
-  thirdPic.title = allItems[random3].name;
-  allItems[random3].views++;
-  allItems[random3].clicks++;
-  console.log(allItems[random3].views);
+function randomPic() {
+  return Math.floor(Math.random() * allItems.length);
 }
 
-itemRandom();
+function displayImages() {
+  var imageLeft = randomPic();
+  var imageCenter = randomPic();
+  var imageRight = randomPic();
 
-function tallyVote(thissong) {
-  for (var i = 0; i < allItems.length; i++){
-    if (thissong === allItems[i].identifier){
-      allItems[i].clicks++;
+  while (imageCenter === imageLeft) {
+    imageCenter = randomPic();
+  }
+
+  while (imageRight === imageCenter || imageRight === imageLeft) {
+    imageRight = randomPic();
+  }
+
+  var firstImage = document.getElementById('image1');
+  firstImage.src = allItems[imageLeft].filepath;
+  firstImage.alt = allItems[imageLeft].name;
+
+  var secondImage = document.getElementById('image2');
+  secondImage.src = allItems[imageCenter].filepath;
+  secondImage.alt = allItems[imageCenter].name;
+
+  var thirdImage = document.getElementById('image3');
+  thirdImage.src = allItems[imageRight].filepath;
+  thirdImage.alt = allItems[imageRight].name;
+}
+
+displayImages();
+
+function clicks(event) {
+  var imageId = event.target.id;
+  var imageAlt = event.target.alt;
+
+  if (imageId === 'outsidepic') {
+    alert('Please click on an image to vote!');
+  } else if (numberOfClicks < 25) {
+    for (var i = 0; i < allItems.length; i++) {
+      if(imageAlt === allItems[i].name) {
+        allItems[i].votes += 1;
+        numberOfClicks++;
+      }
+      if (numberOfClicks === 25) {
+        document.getElementById('resultsbutton');
+        resultsbutton.style.visibility = 'visible';
+      } else {
+        document.getElementById('resultsbutton');
+        resultsbutton.style.visibility = 'hidden';
+        displayImages();
+      }
     }
   }
 }
 
 
-var clicks =[];
-var views = [];
-function itemsAsList (){
-  var itemList = document.getElementById('list');
 
-  itemList.innerHTML = '';
-  
+function updateChart() {
   for (var i = 0; i < allItems.length; i++) {
-    var liEl = document.createElement('li');
-    liEl.textContent = allItems[i].name + ', ' + allItems[i].views + ' views '+ allItems[i].clicks +' clicks.';
-
-    itemList.appendChild(liEl);
-
+    itemLabels.push(allItems[i].name);
+    voteLabels.push(allItems[i].votes);
   }
 }
 
+function makeChart() {
+  updateChart();
+  var ctx = document.getElementById('chart');
 
-/*function makeChart() {
-  var ctx = document.getElementById('myChart');
-
-  var myChart = new Chart(ctx, {
+  var chart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: labels,
+      labels: itemLabels,
       datasets: [{
-        label: 'BusMall Survey Results',
+        label: 'Product Survey Results',
         data: voteLabels,
-        backgroundColor:'#00BFD0',
+        backgroundColor:'red',
         borderWidth: 1
       }]
     },
@@ -120,12 +129,12 @@ function itemsAsList (){
         xAxes: [{
           scaleLabel: {
             display: true,
-            labelString: 'Item Types'
+            labelString: 'Products'
           }
         }],
         yAxes: [{
           ticks: {
-            max: 4,
+            max: 5,
             min: 0,
             stepSize: 1,
           }
@@ -133,30 +142,7 @@ function itemsAsList (){
       }
     }
   });
- 
-}*/
-
-
-secondPic.addEventListener('click', handleClick);
-firstPic.addEventListener('click', handleClick);
-thirdPic.addEventListener('click', handleClick);
-
-/*document.getElementById('chart').addEventListener('click', function(){
-  makeChart();
-});*/
-
-document.getElementById('list');addEventListener('click',function(){
-  itemsAsList();
-});
-
-document.getElementById('pics').addEventListener('click', function(event){
-  tallyVote(event.target.id);
-} );
-
-function handleClick() {
-  console.log('target, ', event.target);
-
-  itemRandom();
-
 }
 
+clicksOnImage.addEventListener('click', clicks);
+results.addEventListener('click', makeChart);

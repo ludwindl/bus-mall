@@ -98,6 +98,11 @@ function clicks(event) {
       }
     }
   }
+  localStorage.clear();
+  var imgArrayData = JSON.stringify(allItems);
+  localStorage.setItem('allItems' , imgArrayData);
+  var clickTotal = JSON.stringify(numberOfClicks);
+  localStorage.setItem('clicks' , clickTotal);
 }
 
 
